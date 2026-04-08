@@ -1,8 +1,8 @@
 import express from "express"
-import authRouter from"./routes/authRouter.js"
+import authRouter from"./routes/auth.routes.js"
 import cookieParser from "cookie-parser";
 import cors from "cors"
-
+import interviewrouter from "./routes/interview.routes.js"
 
 export const app = express();
 
@@ -13,3 +13,4 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 app.use("/api/auth",authRouter)
+app.use("/api/interview",interviewrouter)

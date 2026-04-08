@@ -1,96 +1,92 @@
 import mongoose from "mongoose";
 
 const technicalQuestionSchema = new mongoose.Schema({
-    question:{
-        type:string,
-        requiered:true
+    question: {
+        type: String,
+        required: true
     },
-    intention:{
-        type:string,
-        requiered:true
+    intention: {
+        type: String,
+        required: true
     },
-    answer:{
-        type:string,
-        requiered:true
+    answer: {
+        type: String,
+        required: true
     }
-},
-{
-    _id:false
-})
+}, { _id: false })
 
-const BehavioralQuestionSchema = new mongoose.Schema({
-       question:{
-        type:string,
-        requiered:true
+const behavioralQuestionSchema = new mongoose.Schema({
+    question: {
+        type: String,
+        required: true
     },
-    intention:{
-        type:string,
-        requiered:true
+    intention: {
+        type: String,
+        required: true
     },
-    answer:{
-        type:string,
-        requiered:true
+    answer: {
+        type: String,
+        required: true
     }
-},
-{
-    _id:false
-}    
-)
+}, { _id: false })
 
-const skillGapsSchema = new mongoose.Schema({
-    skills:{
-        type:String,
-        requiered:true,
+const skillGapSchema = new mongoose.Schema({
+    skill: {           // Fixed: was "skills", AI returns "skill"
+        type: String,
+        required: true,
     },
-    severity:{
-        type:String,
-        requiered:true,
-        enum:[high,medium,low]
-    },
-  
-
-},{_id:false})
+    severity: {
+        type: String,
+        required: true,
+        enum: ["high", "medium", "low"]
+    }
+}, { _id: false })
 
 const preparationPlanSchema = new mongoose.Schema({
-    day:{
-        type:String,
-        requiered:true
-
+    day: {
+        type: Number,  // Fixed: was String, AI returns a number
+        required: true
     },
-    focus:{
-        type:String,
-        requiered:true
+    focus: {
+        type: String,
+        required: true
     },
-    tasks:[{
-        type:string,
-        requiered:true
+    tasks: [{
+        type: String,
+        required: true
     }]
-    
-},{_id:false})
+}, { _id: false })
 
-const InterviweReportSchema = new mongoose.Schema({
+const interviewReportSchema = new mongoose.Schema({
+    jobdescription: {
+        type: String,
+        required: [true, "Job Description is Mandatory"]
+    },
+    resumetext: {
+        type: String
+    },
+    selfdescription: {
+        type: String
+    },
+    title: {
+        type: String       
+    },
+    matchScore: {
+        type: Number,       
+        min: 0,
+        max: 100
+    },
+    technicalquestions: [technicalQuestionSchema],   
+    behavioralquestions: [behavioralQuestionSchema], 
+    skillgaps: [skillGapSchema],                     
+    preparationplan: [preparationPlanSchema],        
+    rawAI: {
+        type: mongoose.Schema.Types.Mixed            
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users"
+    }
+}, { timestamps: true })
 
-    jobdescription:{
-        type:String,
-        requiered:[true,"Job Description is Mandatory"]   
-    },
-    resumetext:{
-        type:String
-    },
-    selfdescription:{
-        typr:String
-    },
-    Overallscore:{
-        type:Number,
-        min:0,
-        max:100
-    },
-    technicalquestions:[technicalQuestionSchema],
-    behavioralquestions:[BehavioralQuestionSchema],
-    skillgaps:[skillGapsSchema],
-    preprationplan:[preparationPlanSchema]
-},{
-    timestamps:true
-})
-
-export default mongoose.model("interviewReport",InterviweReportSchema)
+export default mongoose.model("interviewReport", interviewReportSchema)

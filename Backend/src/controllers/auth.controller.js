@@ -42,10 +42,11 @@ export const registerUser = expressAsyncHandler(async (req, res) => {
     process.env.JWT_SECRET,
     { expiresIn: "1d" },
   );
-  res.cookie("token", token);
+ 
 
   res.status(201).json({
     message: "New user registered",
+    token,
     user: {
       id: newuser._id,
       username: newuser.username,
@@ -84,9 +85,11 @@ export const login = expressAsyncHandler(async (req, res) => {
     },
     process.env.JWT_SECRET,
     { expiresIn: "1d" },
+    
   );
 
-  res.cookie("token",token);
+ 
+
 
   res.status(201).json({
     message: "User logged in",
@@ -94,7 +97,9 @@ export const login = expressAsyncHandler(async (req, res) => {
       id: user._id,
       username: user.username,
       email: user.email,
+      
     },
+    token,
   });
 });
 

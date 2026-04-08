@@ -1,63 +1,102 @@
-import React from "react";
-import "../auth.form.scss";
-import { useNavigate, Link } from "react-router-dom";
-import { useAuth } from "../Hookss/useAuth.js";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../Hookss/useAuth.js";
+import "./auth.css";
 
 const Login = () => {
-  const { loading, handleLogin } = useAuth();
-
+  const { handleLogin } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handlesubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    await handleLogin({email,password});
-    navigate("/");
- };
-   
- if(loading){
-    return(<main><h1>loading..........</h1></main>)
- }
+    setError("");
+
+    if (!email || !password) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await handleLogin({ email, password });
+      navigate("/interview");
+    } catch (err) {
+      setError(err?.response?.data?.message || "Invalid email or password.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <main>
-      <div className="form-container">
-        <h1>Login</h1>
-        <form onSubmit={handlesubmit}>
-          <div className="input-group">
+    <div className="auth-page">
+
+      <Link to="/" className="auth-logo">
+        ResumeAI<span>.</span>
+      </Link>
+
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1>Welcome back</h1>
+          <p>Sign in to your account to continue</p>
+        </div>
+
+        {error && (
+          <div className="auth-error">
+            ⚠️ {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div className="auth-field">
             <label htmlFor="email">Email</label>
             <input
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              type="email"
               id="email"
-              name="email"
-              placeholder="Enter Email Id"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
             />
           </div>
-          <div className="input-group">
+
+          <div className="auth-field">
             <label htmlFor="password">Password</label>
             <input
-              onChange={(e) => {
-                setpassword(e.target.value);
-              }}
-              type="password"
               id="password"
-              name="password"
-              placeholder="Enter password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete="current-password"
             />
           </div>
-          <button className="button primary-button">Login</button>
+
+          <button className="auth-btn" type="submit" disabled={loading}>
+            {loading ? (
+              <>
+                <span className="auth-spinner" />
+                Signing in...
+              </>
+            ) : (
+              "Sign in →"
+            )}
+          </button>
         </form>
-        <p>
-          Don't have an account ? <Link to={"/register"}>Register</Link>
+
+        <div className="auth-divider" />
+
+        <p className="auth-footer">
+          Don't have an account?{" "}
+          <Link to="/register">Create one</Link>
         </p>
       </div>
-    </main>
+
+    </div>
   );
 };
 

@@ -6,7 +6,7 @@ const Protected = ({children}) => {
     const navigate = useNavigate();
 
     if(loading){
-        retrurn (<main><h1>Loading....</h1></main>)
+        return (<main><h1>Loading....</h1></main>)
     }
     if(!user){
         navigate("/login")

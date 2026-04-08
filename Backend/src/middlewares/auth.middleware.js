@@ -1,26 +1,19 @@
-import jwt from "jsonwebtoken"
-import expressAsyncHandler from "express-async-handler"
-import blackListModel from "../models/blackListModel.js";
+import jwt from "jsonwebtoken";
 
-export const validatetoken = expressAsyncHandler(async(req,res)=>{
-    const token = req.cookies.token;
+export const authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-    if(!token){
-        return res.status(400).json("Token not sent!");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-    }
-    const isTokenBlacklisted = await blackListModel.findOne({token});
-    if(isTokenBlacklisted){
-        return res.status(401).json("Token is invalid!");
-    }
-    try{
-        const decoded = jwt.verify(token,process.env.JWT_SECRET);
+  const token = authHeader.split(" ")[1];
 
-        req.user = decoded;
-
-        next();
-    }
-    catch(error){
-        res.status(401).json("Unauthorized");
-    }
-})
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: "Invalid token" });
+  }
+};
