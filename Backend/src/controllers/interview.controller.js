@@ -11,7 +11,7 @@ export const generateAiReportController = expressAsyncHandler(async (req, resp) 
         throw new Error("Resume file is required");
     }
 
-    const resumeContent = await new PDFParse(resumeFile.buffer);
+    const resumeContent = new PDFParse(resumeFile.buffer);
     const { selfdescription, jobdescription } = req.body;
 
     if (!selfdescription || !jobdescription) {
@@ -56,7 +56,7 @@ export const generateResumePdfController = expressAsyncHandler(async (req, resp)
         throw new Error("Resume file is required");
     }
 
-    const resumeContent = await new PDFParse(resumeFile.buffer);
+    const resumeContent = new PDFParse(resumeFile.buffer);
     const { selfdescription, jobdescription } = req.body;
 
     if (!selfdescription || !jobdescription) {
