@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ".interview.css";
+import "./interview.css";
 
 // Score ring color based on value
 function getScoreColor(score) {
