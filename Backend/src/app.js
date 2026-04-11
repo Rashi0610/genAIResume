@@ -7,7 +7,7 @@ import interviewrouter from "./routes/interview.routes.js"
 export const app = express();
 
 app.use(cors({
-    origin:["http://localhost:5173","https://your-frontend.vercel.app"],
+    origin:["http://localhost:5173","https://gen-ai-resume.vercel.app"],
     credentials:true
 }))
 app.use(express.json())
