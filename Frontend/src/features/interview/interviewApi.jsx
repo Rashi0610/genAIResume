@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE = "https://genairesume-wmn6.onrender.com";
+const API_BASE = "https://genairesume-wmn6.onrender.com/api";
 
 // Attach token from localStorage automatically
 const authHeaders = () => ({
